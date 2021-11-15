@@ -1,0 +1,4 @@
+เปลี่ยน path
+1. ใน main_code.py บรรทัดที่ 2 แก้ตัวแปรชื่อ project_path = 'C:/fra361_st4_voca_ui' เป็นของ path ตัวเอง
+2. ใน upload_pic.py บรรทัดที่ 2 แก้ตัวแปรชื่อ project_path = 'C:/fra361_st4_voca_ui' เป็นของ path ตัวเอง
+
