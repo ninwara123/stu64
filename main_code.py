@@ -1,5 +1,5 @@
 # project_path = 'C:/fra361_st4_voca_ui'
-project_path = 'D:/fra361_st4_voca_ui-main'
+project_path = 'D:/stu64'
 
 # from os import name
 from os import path, read
@@ -18,6 +18,8 @@ import face_recognition as face
 import numpy as np
 import csv
 from playsound import playsound
+import speech_recognition as sr
+import pyaudio
 
 ### init ###################################################################################################
 pg.init()
@@ -37,7 +39,7 @@ orange = (242,157,0)
 ### creat object ###########################################################################################
 #global
 u1 = user()
-
+micc = True
 #login_page
 register_btn = Button(729, 388 , 217, 87)
 login_btn = Button(969, 388, 217, 87)
@@ -131,6 +133,7 @@ test_pass =['','','']      # 'animal_pass','classroom_pass','food_pass'
 # state variables
 page = 'start'
 newstatus = 0
+practice_pass = 0 
 take_pic_state = 0
 add_pic_state = 0
 user_status = 'nohave' 
@@ -146,7 +149,7 @@ user_data_path = project_path +'/user_data'
 #words
 animal_word_pack = [0,['Turtle','Starfish','Octopus','Jellyfish','Seahorse']]
 classroon_word_pack  =  [1,['Calculator','Calendar','Magnifying Glass','Notice Board','Scissors']]
-food_word_pack =  [2,['Omelete','Spaghetti','Cookies','Croissant','Lemonade']]
+food_word_pack =  [2,['Omelette','Spaghetti','Cookies','Croissant','Lemonade']]
 word_test = [] #no.set , word 
 
 FOOD_LIST = ['Noodle','Spaghetti','Cookies','Croissant','Lamonade']
@@ -204,56 +207,40 @@ while(1):
         if len(txt_member_list) == 0:
             page = "login"
         else:
-            page = 'scan'
+            page = 'login'
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 pg.quit()
 
 ##### CODE SCAN PAGE #########################################################################################
     elif page == 'scan':
-        # txt_member_list = []
-        # mempicture_list = []
-        # known_face_names = []
-        
         for o in range(len(txt_member_list)):
             file_name,type_file = txt_member_list[o].split(".")
             user_data_file = open('user_data/'+file_name+'.csv','r', encoding="utf8")
             reader = csv.reader(user_data_file)
             for row in reader:
                 memprofile = row[0:6]
-                
-                # hold_p = row[5:8]
-                # test_pass = row[8:11]
                 mempicture_list.append(file_name+"."+memprofile[4])
             user_data_file.close()
-
-            # file = open(txt_member_list[o],"r")
-            # for i in file:
-            #     a,b,c,d,e,f = i.split(",")
-            #     # memprofile = [a,b,c,d,e,f]
-            #     mempicture_list.append(file_name+"."+e)
-            # file.close()
         print('txt_member_list')
         print(txt_member_list)
         print('mempicture_list')
         print(mempicture_list)
         print(len(txt_member_list))
         #ใบหน้าคนที่ต้องการรู้จำเป็นreference #คนที่1
-
         for i in range(len(txt_member_list)):
-            # print(mempicture_list[i])
             print(i)
             file_name,type_file = txt_member_list[i].split(".")
             print(file_name+"\n"+type_file)
-        #     # mmmmooo.append(face.load_image_file(str(mempicture_list[i])))
-        #     # user_face_encoding = face.face_encodings(mmmmooo[i])[0]
-            known_face_encodings.append(face.face_encodings(face.load_image_file("user_data/"+mempicture_list[i]))[0])
-            known_face_names.append(file_name)
+            try:
+                known_face_encodings.append(face.face_encodings(face.load_image_file("user_data/"+mempicture_list[i]))[0])
+                known_face_names.append(file_name)
+            except:
+                continue
         face_locations = []
         face_encodings = []
         face_names = []
         face_percent = []
-        # print(known_face_encodings)
         print(known_face_names)
         video_capture = cv2.VideoCapture(0) 
         while capper == True:
@@ -285,22 +272,14 @@ while(1):
                             hold_p = row[6:9]
                             test_pass = row[9:12]
                         user_data_file.close()
-                        # file = open(name+".csv","r")
-                        # for i in file:
-                        #     a,b,c,d,e,f = i.split(",")
-                        #     memprofile = [a,b,c,d,e,f]
-                        # file.close()
                     capper = False
                     page = "profile"
                     print("findddddd")
             if k >= 5:
                 page = "login"
                 capper = False
-                # face_names.append(name)
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
-            # else:
-            #     break
         video_capture.release()
         cv2.destroyAllWindows()
         for event in pg.event.get():
@@ -425,7 +404,7 @@ while(1):
                     is_human = 1
                     newstatus = 1
                 # C:/fra361_st4_voca_ui/temp_data
-                    filepath = "D:/fra361_st4_voca_ui-main/temp_data/capture.png"
+                    filepath = "D:/stu64/temp_data/capture.png"
                     takephoto.release()
                     cv2.destroyAllWindows()
             if add_pic.mouse_on():  #กดถ่ายรูปแล้ว upload รูป
@@ -466,7 +445,7 @@ while(1):
                 kk = int((440-(440*h/w))/2)
             screen.blit(ulp.bgwhite,(128,150))
             screen.blit(pg.transform.scale(Profile_pic,(ww,hh)),(134+jj,155+kk))
-        path = 'D:/fra361_st4_voca_ui-main/user_data'
+        path = 'D:/stu64/user_data'
         filenames = os.listdir(path)
         for filename in filenames:
             if '.csv' in filename:
@@ -546,7 +525,7 @@ while(1):
         userFullName = userFirstName+"  "+userSurName
         t3 = Text(743, 216, 45, "browallianewbold", (0,0,0), 1, userFullName)
         t4 = Text(810, 294, 45, "browallianewbold", (0,0,0), 1, userNickName)
-        filepath = 'D:/fra361_st4_voca_ui-main/user_data/'+str(memprofile[0])+"."+str(memprofile[4])
+        filepath = 'D:/stu64/user_data/'+str(memprofile[0])+"."+str(memprofile[4])
         pic_show_data = pic(filepath,400,440)
 
         screen.blit(pg.transform.scale(pic_show_data[4],(pic_show_data[0],pic_show_data[1])),(85+pic_show_data[2],155+pic_show_data[3])) 
@@ -818,13 +797,13 @@ while(1):
         print('animal_lesson')
         screen.blit(ulp.animal_lesson_page, (0,0))
         if boi_state == 1:
-            boi = pg.image.load('D:/fra361_st4_voca_ui-main/ui_photo/pop_up_animal_'+m0.lower()+'.png')
+            boi = pg.image.load('D:/stu64/ui_photo/pop_up_animal_'+m0.lower()+'.png')
             screen.blit(boi,(0,0))
             pg.display.update()
             if sound_count == 1:
-                playsound("D:/fra361_st4_voca_ui-main/sound_list/"+m0+".mp3") 
-                playsound("D:/fra361_st4_voca_ui-main/sound_list/SP_"+m0+".mp3") 
-                playsound("D:/fra361_st4_voca_ui-main/sound_list/"+m0+".mp3") 
+                playsound("D:/stu64/sound_list/"+m0+".mp3") 
+                playsound("D:/stu64/sound_list/SP_"+m0+".mp3") 
+                playsound("D:/stu64/sound_list/"+m0+".mp3") 
                 sound_count = 0                                                                          
             if pg.mouse.get_pressed()[0] == 1:
                 click = 1
@@ -910,17 +889,17 @@ while(1):
 
     elif page == 'classroon_lesson':
         print('classroon_lesson')
-        # classroon_lesson_page = pg.image.load('D:/fra361_st4_voca_ui-main/ui_photo/lesson_classroom.jpg')
+        # classroon_lesson_page = pg.image.load('D:/stu64/ui_photo/lesson_classroom.jpg')
         screen.blit(ulp.classroon_lesson_page,(0,0))
         # screen.blit(ulp.food_lesson_page, (0,0))
         if boi_state == 1:
-            boi = pg.image.load('D:/fra361_st4_voca_ui-main/ui_photo/pop_up_classroom_'+m0.lower()+'.png')
+            boi = pg.image.load('D:/stu64/ui_photo/pop_up_classroom_'+m0.lower()+'.png')
             screen.blit(boi,(0,0))
             pg.display.update()
             if sound_count == 1:
-                playsound("D:/fra361_st4_voca_ui-main/sound_list/"+m0+".mp3") 
-                playsound("D:/fra361_st4_voca_ui-main/sound_list/SP_"+m0+".mp3") 
-                playsound("D:/fra361_st4_voca_ui-main/sound_list/"+m0+".mp3") 
+                playsound("D:/stu64/sound_list/"+m0+".mp3") 
+                playsound("D:/stu64/sound_list/SP_"+m0+".mp3") 
+                playsound("D:/stu64/sound_list/"+m0+".mp3") 
                 sound_count = 0                                                                          
             if pg.mouse.get_pressed()[0] == 1:
                 click = 1
@@ -1009,13 +988,13 @@ while(1):
         print('food_lesson')
         screen.blit(ulp.food_lesson_page, (0,0))
         if boi_state == 1:
-            boi = pg.image.load('D:/fra361_st4_voca_ui-main/ui_photo/pop_up_food_'+m0.lower()+'.png')
+            boi = pg.image.load('D:/stu64/ui_photo/pop_up_food_'+m0.lower()+'.png')
             screen.blit(boi,(0,0))
             pg.display.update()
             if sound_count == 1:
-                playsound("D:/fra361_st4_voca_ui-main/sound_list/"+m0+".mp3") 
-                playsound("D:/fra361_st4_voca_ui-main/sound_list/SP_"+m0+".mp3") 
-                playsound("D:/fra361_st4_voca_ui-main/sound_list/"+m0+".mp3") 
+                playsound("D:/stu64/sound_list/"+m0+".mp3") 
+                playsound("D:/stu64/sound_list/SP_"+m0+".mp3") 
+                playsound("D:/stu64/sound_list/"+m0+".mp3") 
                 sound_count = 0                                                                          
             if pg.mouse.get_pressed()[0] == 1:
                 click = 1
@@ -1034,7 +1013,7 @@ while(1):
         if n2.mouse_on() and boi_state == 0:
             screen.blit(ulp.n2_mouseon,(0,0))
             if pg.mouse.get_pressed()[0] == 1:
-                m0 = "Omelete"
+                m0 = "Omelette"
                 click = 1
             if pg.mouse.get_pressed()[0] == 0 and click == 1:   
                 boi_state = 1
@@ -1135,6 +1114,8 @@ while(1):
                 
                 page = 'test_practice'
                 word_test = animal_word_pack
+                for u in range(5):
+                    pic_i_run.append(pg.image.load('D:/stu64/practice_pic/'+ str(word_test[1][u]).lower() +'.png'))
                 EXAMNO[0] = int(hold_p[word_test[0]])
                 print(EXAMNO[0])
                 text_check = 0
@@ -1149,7 +1130,8 @@ while(1):
             if pg.mouse.get_pressed()[0] == 0 and click ==1:
                 page = 'test_practice'
                 word_test = classroon_word_pack
-                
+                for u in range(5):
+                    pic_i_run.append(pg.image.load('D:/stu64/practice_pic/'+ str(word_test[1][u]).lower() +'.png'))
                 EXAMNO[0] = int(hold_p[word_test[0]])
                 
                 print(EXAMNO[0])
@@ -1165,7 +1147,7 @@ while(1):
                 word_test = food_word_pack
 
                 for u in range(5):
-                    pic_i_run.append(pg.image.load('D:/fra361_st4_voca_ui-main/practice_pic/'+ str(word_test[1][u]).lower() +'.png'))
+                    pic_i_run.append(pg.image.load('D:/stu64/practice_pic/'+ str(word_test[1][u]).lower() +'.png'))
                 
                 EXAMNO[0] = int(hold_p[word_test[0]])
                 print(EXAMNO[0])
@@ -1177,6 +1159,10 @@ while(1):
             if event.type == pg.QUIT:
                 pg.quit() 
 
+    elif page == "success":
+        screen.blit(ulp.success,(0,0))
+        pg.time.delay(3)
+        page = "practice"
     elif page == 'test_practice':
         # try:
         # practice_pic = pg.load()
@@ -1222,6 +1208,8 @@ while(1):
                 if pg.mouse.get_pressed()[0] == 0 and click ==1:
                     EXAMNO[1] = 1
                     EXAMNO[0] -= 1
+                    type_test_inputbox.text = "  "
+                    type_test_inputbox.txt_surface = type_test_inputbox.font.render(type_test_inputbox.text, True, pg.Color("black"))
                     
                     click =0
         if EXAMNO[0] < 4:
@@ -1232,31 +1220,64 @@ while(1):
                     
                     EXAMNO[1] = 1
                     EXAMNO[0] += 1
-                    
+                    type_test_inputbox.text = "  "
+                    type_test_inputbox.txt_surface = type_test_inputbox.font.render(type_test_inputbox.text, True, pg.Color("black"))
                     click =0
 
         # screen.blit(ulp.pic_i_test_object[word_test[0]][EXAMNO[0]],(528,165))
         screen.blit(pic_i_run[EXAMNO[0]],(490,165))
-
+        if practice_pass == 1:
+            mic = sr.Microphone(1)
+            r = sr.Recognizer()
+            with mic as source:
+                # r.adjust_for_ambient_noise(source, duration=5)
+                # while micc == True:
+                audio = r.listen(source)
+                try: 
+                # text1 = r.recognize_google(audio)
+                    text1 = r.recognize_google(audio,language='en')
+                    print(text1)
+                    if text1 == word_test[1][EXAMNO[0]].lower():
+                        EXAMNO[1] = 1
+                        # type_test_inputbox.text = "  "
+                        # type_test_inputbox.txt_surface = type_test_inputbox.font.render(type_test_inputbox.text, True, pg.Color("black"))
+                        pass_test_flag = 1 
+                        micc = False
+                        practice_pass = 0
+                    practice_pass = 0
+                except :
+                    print("cant do it")
+                    practice_pass = 0
+                    continue
+                # or type_test_inputbox.text == ("  "+word_test[1][EXAMNO[0]]).lower() or type_test_inputbox.text == ("  "+word_test[1][EXAMNO[0]]).upper():
+        if type_test_inputbox.text.lower() == ("  "+word_test[1][EXAMNO[0]].lower()) :
+            t3 = Text(500,300, 80, "browallianewbold", red, 1, "CORRECT") #text username 
+            t3.draw(screen)
         if enter_press == 1:
-            if type_test_inputbox.text == ("  "+word_test[1][EXAMNO[0]]) or type_test_inputbox.text == ("  "+word_test[1][EXAMNO[0]]).lower() or type_test_inputbox.text == ("  "+word_test[1][EXAMNO[0]]).upper():
+            if type_test_inputbox.text.lower() == ("  "+word_test[1][EXAMNO[0]].lower()) :
                 print("true answer")
-                EXAMNO[1] = 1
-                pass_test_flag = 1  
+                practice_pass = 1
+                 
 
             else :
                 print("wrong answer")
             print("input answer is :" + type_test_inputbox.text)
             print("true answer is :" + ("  "+word_test[1][EXAMNO[0]])  +(',')+ ("  "+word_test[1][EXAMNO[0]]).lower() )#+(',')+ ("  "+word_test[1][EXAMNO[0]]).upper())
             enter_press = 0
-            type_test_inputbox.text = "  "
-            type_test_inputbox.txt_surface = type_test_inputbox.font.render(type_test_inputbox.text, True, pg.Color("black"))
+            # type_test_inputbox.text = "  "
+            # type_test_inputbox.txt_surface = type_test_inputbox.font.render(type_test_inputbox.text, True, pg.Color("black"))
 
         for box in animal_boxes:
             box.draw(screen)
 
 
         #save change
+        # if test_pass[0].find("A") != -1 and test_pass[0].find("B") != -1 and test_pass[0].find("C") != -1 and test_pass[0].find("D") != -1 and test_pass[0].find("E") != -1 and pass_animal == 4:
+        #     page = "success"
+        # if test_pass[1].find("A") != -1 and test_pass[1].find("B") != -1 and test_pass[1].find("C") != -1 and test_pass[1].find("D") != -1 and test_pass[1].find("E") != -1 and pass_classroom == 4:
+        #     page = "success"
+        # if test_pass[2].find("A") != -1 and test_pass[2].find("B") != -1 and test_pass[2].find("C") != -1 and test_pass[2].find("D") != -1 and test_pass[2].find("E") != -1 and pass_food == 4:
+        #     page = "success"
         if EXAMNO[1] == 1 :
             EXAMNO[1] = 0
             hold_p[word_test[0]] = str(EXAMNO[0])
@@ -1298,24 +1319,54 @@ while(1):
             elif EXAMNO[0] == 4 and test_pass[word_test[0]].find("E") == -1 : mark_pass = "E"
             test_pass[word_test[0]] = test_pass[word_test[0]] + mark_pass
             mark_pass = ''
-            if EXAMNO[0] < 4 :
-                EXAMNO[0] += 1
+            # if EXAMNO[0] < 4 :
+            #     EXAMNO[0] += 1
 
         if EXAMNO[0] == 0 and test_pass[word_test[0]].find("A") != -1 :
             t4 = Text(90,250, 80, "browallianewbold", green, 1, "PASS") 
             t4.draw(screen)
+            pg.display.update()
+            pg.time.delay(3000)
+            if EXAMNO[0] < 4 :
+                EXAMNO[0] += 1
+            type_test_inputbox.text = "  "
+            type_test_inputbox.txt_surface = type_test_inputbox.font.render(type_test_inputbox.text, True, pg.Color("black"))
         elif EXAMNO[0] == 1 and test_pass[word_test[0]].find("B") != -1 :
             t4 = Text(90,250, 80, "browallianewbold", green, 1, "PASS") 
             t4.draw(screen)
+            pg.display.update()
+            pg.time.delay(3000)
+            if EXAMNO[0] < 4 :
+                EXAMNO[0] += 1
+            type_test_inputbox.text = "  "
+            type_test_inputbox.txt_surface = type_test_inputbox.font.render(type_test_inputbox.text, True, pg.Color("black"))
         elif EXAMNO[0] == 2 and test_pass[word_test[0]].find("C") != -1 :
             t4 = Text(90,250, 80, "browallianewbold", green, 1, "PASS") 
             t4.draw(screen)
+            pg.display.update()
+            pg.time.delay(3000)
+            if EXAMNO[0] < 4 :
+                EXAMNO[0] += 1
+            type_test_inputbox.text = "  "
+            type_test_inputbox.txt_surface = type_test_inputbox.font.render(type_test_inputbox.text, True, pg.Color("black"))
         elif EXAMNO[0] == 3 and test_pass[word_test[0]].find("D") != -1 :
             t4 = Text(90,250, 80, "browallianewbold", green, 1, "PASS") 
             t4.draw(screen)
+            pg.display.update()
+            pg.time.delay(3000)
+            if EXAMNO[0] < 4 :
+                EXAMNO[0] += 1
+            type_test_inputbox.text = "  "
+            type_test_inputbox.txt_surface = type_test_inputbox.font.render(type_test_inputbox.text, True, pg.Color("black"))
         elif EXAMNO[0] == 4 and test_pass[word_test[0]].find("E") != -1 :
             t4 = Text(90,250, 80, "browallianewbold", green, 1, "PASS") 
             t4.draw(screen)
+            pg.display.update()
+            pg.time.delay(3000)
+            if EXAMNO[0] < 4 :
+                EXAMNO[0] += 1
+            type_test_inputbox.text = "  "
+            type_test_inputbox.txt_surface = type_test_inputbox.font.render(type_test_inputbox.text, True, pg.Color("black"))
         else :
             t4 = Text(90,250, 80, "browallianewbold", green, 1, "")
             t4.draw(screen)

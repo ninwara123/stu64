@@ -1,5 +1,5 @@
 # project_path = 'C:/fra361_st4_voca_ui'
-project_path = 'D:/fra361_st4_voca_ui-main'
+project_path = 'D:/stu64'
 
 from tkinter.filedialog import test
 import pygame as pg
@@ -85,6 +85,7 @@ practice_page =  pg.image.load(ui_pic_path+'/practice_page.jpg')
 #practice_page
 test_page = pg.image.load(ui_pic_path+'/practice_in.jpg')
 correct_icon = pg.image.load(ui_pic_path+'/correct.jpg')
+success = pg.image.load((ui_pic_path+'/section.jpg'))
 
 # animal_test_pic_1 = pg.image.load(ui_pic_path+'/test_pic/animal_test_1.jpg')
 # animal_test_pic_2 = pg.image.load(ui_pic_path+'/test_pic/animal_test_2.jpg')
