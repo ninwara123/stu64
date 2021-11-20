@@ -139,6 +139,7 @@ class user():
         self.memprofile = []
         self.hold_p = []
         self.test_pass = []
+        self.point_pass = []
         self.username = ''
         self.firstname = ''
         self.surname = ''
@@ -153,10 +154,10 @@ class user():
         self.pass_3 = ''
         self.fullname = self.firstname + self.surname
 
-    def WriteData(self,memprofile,hold_p,test_pass):
+    def WriteData(self,memprofile,hold_p,test_pass,point_pass):
         row = []
         # row = row+self.memprofile+self.hold_p+self.test_pass
-        row = memprofile + hold_p + test_pass
+        row = memprofile + hold_p + test_pass + point_pass
         print("row")
         print(row)
         # row = row.append(self.hold_p)
@@ -168,6 +169,7 @@ class user():
         self.memprofile = memprofile
         self.hold_p = hold_p
         self.test_pass = test_pass
+        self.point_pass = point_pass
         self.username = self.memprofile[0]
         self.firstname = self.memprofile[1]
         self.surname = self.memprofile[2]
@@ -190,6 +192,7 @@ class user():
             self.memprofile = row[0:6]
             self.hold_p = row[6:9]
             self.test_pass = row[9:12]        
+            self.point_pass = row[12:15]
         user_data_file.close()
 
         self.username = self.memprofile[0]
@@ -205,7 +208,7 @@ class user():
         self.pass_2 = self.test_pass[1]
         self.pass_3 = self.test_pass[2]
         self.fullname = self.firstname+' '+self.surname
-        return self.memprofile ,self.hold_p ,self.test_pass
+        return self.memprofile ,self.hold_p ,self.test_pass,self.point_pass
 
     def SerchLogin(self,username):
         filenames = os.listdir(user_data_path)
@@ -221,3 +224,16 @@ class user():
             
         return user_status
 
+    def PointPassAll(self,index):
+        if self.point_pass[index].find("A") != -1 and self.point_pass[index].find("B") != -1  and self.point_pass[index].find("C") != -1  and self.point_pass[index].find("D") != -1  and self.point_pass[index].find("E") != -1  :
+            # print("mode"+str(index)+"pass all")
+            return 1
+        else:
+            return 0
+
+    def TestPassAll(self,index):
+        if self.test_pass[index].find("A") != -1 and self.test_pass[index].find("B") != -1  and self.test_pass[index].find("C") != -1  and self.test_pass[index].find("D") != -1  and self.test_pass[index].find("E") != -1  :
+            # print("mode"+str(index)+"pass all")
+            return 1
+        else:
+            return 0

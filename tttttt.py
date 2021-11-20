@@ -79,7 +79,7 @@ back_page_btn = Button(13,13,59,59)
 back_home_btn = Button(93,13,59,59)
 
 #animal
-animal_btn = Button(123,125,375,310)
+animal_btn = Button(123,50,375,310)
 #animal_lesson
 a1 = Button(148,527,161,129)
 a2 = Button(449,113,114,203)
@@ -88,7 +88,7 @@ a4 = Button(879,146,274,309)
 a5 = Button(930,554,308,114)
 
 #classroon
-classroon_btn = Button(455,125,375,310)
+classroon_btn = Button(455,50,375,310)
 #classroom_lesson
 p1 = Button(94,250,189,138)
 p2 = Button(344,366,36,48)
@@ -96,7 +96,7 @@ p3 = Button(459,633,64,44)
 p4 = Button(743,560,69,39)
 p5 = Button(1024,214,104,123)
 #food
-food_btn = Button(860,125,375,310)
+food_btn = Button(860,50,375,310)
 #food_lesson
 n1 = Button(208,260,560-208,440-260)
 n2 = Button(100,500,480,220)
@@ -105,10 +105,11 @@ n4 = Button(650,500,250,220)
 n5 = Button(940,263,210,535-263)
 
 #test
+redu_btn = Button(1056,100,63,63)
 back_test_btn = Button(1130,100,63,63)
 next_test_btn = Button(1200,100,63,63)
 correct_btn = Button(800,250,400,400)
-
+back_to_lesson_btn = Button(174,12,63,63)
 ### variables #############################################################################################
 enter_press = 0
 click = 0
@@ -129,7 +130,7 @@ EXAMNO = [0,0] # no.EXAMNO , check change EXAMNO
 memprofile = []    # 'username', 'firstname', 'surname', 'nickname','type_of_pic'
 hold_p = ['0','0','0']        # 'animal_hold_p','classroom_hold_p','food_hold_p'
 test_pass =['','','']      # 'animal_pass','classroom_pass','food_pass'
-point_pass = ['','','']
+count_pass = ['','',''] 
 # state variables
 page = 'start'
 newstatus = 0
@@ -323,7 +324,7 @@ while(1):
                     
                     if  u1.SerchLogin(distance_box.text) == 'have' : 
                         click = 1    
-                        memprofile,hold_p,test_pass,point_pass = u1.ReadData(distance_box.text)
+                        memprofile,hold_p,test_pass = u1.ReadData(distance_box.text)
                     else :  
                         wrong[2] = 1
                     print('memprofile')
@@ -404,7 +405,7 @@ while(1):
                     is_human = 1
                     newstatus = 1
                 # C:/fra361_st4_voca_ui/temp_data
-                    filepath = project_path+'/temp_data/capture.png'
+                    filepath = "D:/stu64/temp_data/capture.png"
                     takephoto.release()
                     cv2.destroyAllWindows()
             if add_pic.mouse_on():  #กดถ่ายรูปแล้ว upload รูป
@@ -445,7 +446,7 @@ while(1):
                 kk = int((440-(440*h/w))/2)
             screen.blit(ulp.bgwhite,(128,150))
             screen.blit(pg.transform.scale(Profile_pic,(ww,hh)),(134+jj,155+kk))
-        path = project_path+'/user_data'
+        path = 'D:/stu64/user_data'
         filenames = os.listdir(path)
         for filename in filenames:
             if '.csv' in filename:
@@ -472,10 +473,9 @@ while(1):
                         is_human = 0
 
                     memprofile = [username_register.text, firstname_register.text, surname_register.text, nickname_register.text,typefi,is_human]
-                    hold_p = ['0','0','0']
-                    test_pass = ['','','']
-                    point_pass = ['','','']
-                    u1.WriteData(memprofile,hold_p,test_pass,point_pass)
+                    # hold_p = ['0','0','0']
+                    # test_pass = ['','','']
+                    u1.WriteData(memprofile,hold_p,test_pass,count_pass)
 
                     if newstatus == 1:
                         if typefi == 'png':
@@ -520,13 +520,13 @@ while(1):
         # print("profile")
         screen.blit(ulp.profile_page,(0,0))
 
-        userFirstName = memprofile[1]
-        userSurName = memprofile[2]
-        userNickName = memprofile[3]
+        userFirstName = memprofile[1].replace(" ","")
+        userSurName = memprofile[2].replace(" ","")
+        userNickName = memprofile[3].replace(" ","")
         userFullName = userFirstName+"  "+userSurName
         t3 = Text(743, 216, 45, "browallianewbold", (0,0,0), 1, userFullName)
         t4 = Text(810, 294, 45, "browallianewbold", (0,0,0), 1, userNickName)
-        filepath = project_path+'/user_data/'+str(memprofile[0])+"."+str(memprofile[4])
+        filepath = 'D:/stu64/user_data/'+str(memprofile[0])+"."+str(memprofile[4])
         pic_show_data = pic(filepath,400,440)
 
         screen.blit(pg.transform.scale(pic_show_data[4],(pic_show_data[0],pic_show_data[1])),(85+pic_show_data[2],155+pic_show_data[3])) 
@@ -570,22 +570,6 @@ while(1):
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 pg.quit()
-        ##### CALCULATE PERCENT PROGRESS #############################################################################
-        # if test_pass[0] != '' or test_pass[1] != '' or test_pass[2] != '':
-        progress_percent = 0.00
-        progress_point = 0
-        for n in range(3):
-            if point_pass[n].find("A") != -1 :
-                progress_point += 1
-            if point_pass[n].find("B") != -1 :
-                progress_point += 1
-            if point_pass[n].find("C") != -1 :
-                progress_point += 1
-            if point_pass[n].find("D") != -1 :
-                progress_point += 1
-            if point_pass[n].find("E") != -1 :
-                progress_point += 1
-        progress_percent = round(((progress_point/15)*100),2)
 
 ##### CODE SETTING PAGE ######################################################################################
 
@@ -793,7 +777,7 @@ while(1):
             if pg.mouse.get_pressed()[0] == 1:
                 click = 1
             if pg.mouse.get_pressed()[0] == 0 and click ==1:
-                page = 'classroon_lesson'
+                page = 'classroom_lesson'
                 click =0
 
         if food_btn.mouse_on():
@@ -814,13 +798,13 @@ while(1):
         print('animal_lesson')
         screen.blit(ulp.animal_lesson_page, (0,0))
         if boi_state == 1:
-            boi = pg.image.load(project_path+'/ui_photo/pop_up_animal_'+m0.lower()+'.png')
+            boi = pg.image.load('D:/stu64/ui_photo/pop_up_animal_'+m0.lower()+'.png')
             screen.blit(boi,(0,0))
             pg.display.update()
             if sound_count == 1:
-                # playsound(project_path+'/sound_list/'+m0+".mp3") 
-                # playsound(project_path+'/sound_list/SP_'+m0+".mp3") 
-                # playsound(project_path+'/sound_list/'+m0+".mp3") 
+                playsound("D:/stu64/sound_list/"+m0+".mp3") 
+                playsound("D:/stu64/sound_list/SP_"+m0+".mp3") 
+                playsound("D:/stu64/sound_list/"+m0+".mp3") 
                 sound_count = 0                                                                          
             if pg.mouse.get_pressed()[0] == 1:
                 click = 1
@@ -904,19 +888,19 @@ while(1):
             if event.type == pg.QUIT:
                 pg.quit() 
 
-    elif page == 'classroon_lesson':
+    elif page == 'classroom_lesson':
         print('classroon_lesson')
-        # classroon_lesson_page = pg.image.load(project_path+'/ui_photo/lesson_classroom.jpg')
+        # classroon_lesson_page = pg.image.load('D:/stu64/ui_photo/lesson_classroom.jpg')
         screen.blit(ulp.classroon_lesson_page,(0,0))
         # screen.blit(ulp.food_lesson_page, (0,0))
         if boi_state == 1:
-            boi = pg.image.load(project_path+'/ui_photo/pop_up_classroom_'+m0.lower()+'.png')
+            boi = pg.image.load('D:/stu64/ui_photo/pop_up_classroom_'+m0.lower()+'.png')
             screen.blit(boi,(0,0))
             pg.display.update()
             if sound_count == 1:
-                # playsound(project_path+'/sound_list/'+m0+".mp3") 
-                # playsound(project_path+'/sound_list/SP_'+m0+".mp3") 
-                # playsound(project_path+'/sound_list/'+m0+".mp3") 
+                playsound("D:/stu64/sound_list/"+m0+".mp3") 
+                playsound("D:/stu64/sound_list/SP_"+m0+".mp3") 
+                playsound("D:/stu64/sound_list/"+m0+".mp3") 
                 sound_count = 0                                                                          
             if pg.mouse.get_pressed()[0] == 1:
                 click = 1
@@ -999,19 +983,17 @@ while(1):
             if event.type == pg.QUIT:
                 pg.quit() 
 
-   
-
     elif page == 'food_lesson':
         print('food_lesson')
         screen.blit(ulp.food_lesson_page, (0,0))
         if boi_state == 1:
-            boi = pg.image.load(project_path+'/ui_photo/pop_up_food_'+m0.lower()+'.png')
+            boi = pg.image.load('D:/stu64/ui_photo/pop_up_food_'+m0.lower()+'.png')
             screen.blit(boi,(0,0))
             pg.display.update()
             if sound_count == 1:
-                # playsound(project_path+'/sound_list/'+m0+".mp3") 
-                # playsound(project_path+'/sound_list/SP_'+m0+".mp3") 
-                # playsound(project_path+'/sound_list/'+m0+".mp3") 
+                playsound("D:/stu64/sound_list/"+m0+".mp3") 
+                playsound("D:/stu64/sound_list/SP_"+m0+".mp3") 
+                playsound("D:/stu64/sound_list/"+m0+".mp3") 
                 sound_count = 0                                                                          
             if pg.mouse.get_pressed()[0] == 1:
                 click = 1
@@ -1132,7 +1114,7 @@ while(1):
                 page = 'test_practice'
                 word_test = animal_word_pack
                 for u in range(5):
-                    pic_i_run.append(pg.image.load(project_path+'/practice_pic/'+ str(word_test[1][u]).lower() +'.png'))
+                    pic_i_run.append(pg.image.load('D:/stu64/practice_pic/'+ str(word_test[1][u]).lower() +'.png'))
                 EXAMNO[0] = int(hold_p[word_test[0]])
                 print(EXAMNO[0])
                 text_check = 0
@@ -1148,7 +1130,7 @@ while(1):
                 page = 'test_practice'
                 word_test = classroon_word_pack
                 for u in range(5):
-                    pic_i_run.append(pg.image.load(project_path+'/practice_pic/'+ str(word_test[1][u]).lower() +'.png'))
+                    pic_i_run.append(pg.image.load('D:/stu64/practice_pic/'+ str(word_test[1][u]).lower() +'.png'))
                 EXAMNO[0] = int(hold_p[word_test[0]])
                 
                 print(EXAMNO[0])
@@ -1164,23 +1146,13 @@ while(1):
                 word_test = food_word_pack
 
                 for u in range(5):
-                    pic_i_run.append(pg.image.load(project_path+'/practice_pic/'+ str(word_test[1][u]).lower() +'.png'))
+                    pic_i_run.append(pg.image.load('D:/stu64/practice_pic/'+ str(word_test[1][u]).lower() +'.png'))
                 
                 EXAMNO[0] = int(hold_p[word_test[0]])
                 print(EXAMNO[0])
                 text_check = 2
                 click =0
             print(pic_i_run)
-        if u1.PointPassAll(0) :
-            t_s_1 = Text(123+30, 50+10+100, 50, "browallianewbold", green, 1, 'Success')
-            t_s_1.draw(screen)
-        if u1.PointPassAll(1) :
-            t_s_2 = Text(455+30, 50+10+100, 50, "browallianewbold", green, 1, 'Success')
-            t_s_2.draw(screen)
-        if u1.PointPassAll(2) :
-            t_s_3 = Text(860+30, 50+10+100, 50, "browallianewbold", green, 1, 'Success')
-            t_s_3.draw(screen)
-
         pg.display.update()
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -1190,7 +1162,6 @@ while(1):
         screen.blit(ulp.success,(0,0))
         pg.time.delay(3)
         page = "practice"
-
     elif page == 'test_practice':
         # try:
         # practice_pic = pg.load()
@@ -1219,6 +1190,17 @@ while(1):
             if pg.mouse.get_pressed()[0] == 0 and click ==1:
                 page = "profile"
                 click =0
+        if back_to_lesson_btn.mouse_on():
+            if pg.mouse.get_pressed()[0] == 1:
+                click = 1
+            if pg.mouse.get_pressed()[0] == 0 and click ==1:
+                click =0
+                if text_check == 0 :
+                    page = "animal_lesson"
+                if text_check == 1 :
+                    page = "classroom_lesson"
+                if text_check == 2 :
+                    page = "food_lesson"
         if option.mouse_on() :   #---------setting
             backpage = "test_practice"
             screen.blit(ulp.all_setting_btn,(1023,12)) 
@@ -1230,7 +1212,13 @@ while(1):
                 page = "setting"
                 back_page_state = "test_practice"
                 click =0
-
+        if redu_btn.mouse_on():
+            if pg.mouse.get_pressed()[0] == 1:
+                click = 1
+            if pg.mouse.get_pressed()[0] == 0 and click ==1:
+                click =0
+                type_test_inputbox.text = "  "
+                type_test_inputbox.txt_surface = type_test_inputbox.font.render(type_test_inputbox.text, True, pg.Color("black"))
         if EXAMNO[0] > 0:
             if back_test_btn.mouse_on():
                 if pg.mouse.get_pressed()[0] == 1:
@@ -1286,9 +1274,7 @@ while(1):
         if enter_press == 1:
             if type_test_inputbox.text.lower() == ("  "+word_test[1][EXAMNO[0]].lower()) :
                 print("true answer")
-                # practice_pass = 1
-                pass_test_flag = 1 
-                EXAMNO[1] = 1
+                practice_pass = 1
                  
 
             else :
@@ -1313,8 +1299,8 @@ while(1):
         if EXAMNO[1] == 1 :
             EXAMNO[1] = 0
             hold_p[word_test[0]] = str(EXAMNO[0])
-            u1.WriteData(memprofile,hold_p,test_pass,point_pass)
-            memprofile,hold_p,test_pass,point_pass = u1.ReadData(memprofile[0])
+            u1.WriteData(memprofile,hold_p,test_pass,count_pass)
+            memprofile,hold_p,test_pass,count_pass = u1.ReadData(memprofile[0])
 
             print('memprofile')
             print(memprofile)
@@ -1324,64 +1310,79 @@ while(1):
             print(test_pass)   
 
 
+
+
+        # t3 = Text(500,300, 80, "browallianewbold", red, 1, word_test[1][EXAMNO[0]]) #text username 
+        # t3.draw(screen)
+
+
+        #for beta
+        # screen.blit(ulp.correct_icon,(800,250))
+        # if correct_btn.mouse_on():
+        #     # print("mouse on")
+        #     if pg.mouse.get_pressed()[0] == 1:
+        #         click = 1
+        #     if pg.mouse.get_pressed()[0] == 0 and click ==1:
+        #         pass_test_flag = 1
+        #         click =0
+
         # for point
-        checklist_stamp = ['A','B','C','D','E']
         if pass_test_flag == 1 :
-            print('pass')
             EXAMNO[1] = 1
             pass_test_flag = 0
-            for i in range(5):
-                if EXAMNO[0] == i and test_pass[word_test[0]].find(checklist_stamp[i]) == -1 : mark_pass = checklist_stamp[i]
-                # elif EXAMNO[0] == 1 and test_pass[word_test[0]].find("B") == -1 : mark_pass = "B"
-                # elif EXAMNO[0] == 2 and test_pass[word_test[0]].find("C") == -1 : mark_pass = "C"
-                # elif EXAMNO[0] == 3 and test_pass[word_test[0]].find("D") == -1 : mark_pass = "D"
-                # elif EXAMNO[0] == 4 and test_pass[word_test[0]].find("E") == -1 : mark_pass = "E"
+            if EXAMNO[0] == 0 and test_pass[word_test[0]].find("A") == -1 : mark_pass = "A"
+            elif EXAMNO[0] == 1 and test_pass[word_test[0]].find("B") == -1 : mark_pass = "B"
+            elif EXAMNO[0] == 2 and test_pass[word_test[0]].find("C") == -1 : mark_pass = "C"
+            elif EXAMNO[0] == 3 and test_pass[word_test[0]].find("D") == -1 : mark_pass = "D"
+            elif EXAMNO[0] == 4 and test_pass[word_test[0]].find("E") == -1 : mark_pass = "E"
+            if EXAMNO[0] == 0 and count_pass[word_test[0]].find("A") == -1 : mark_pass2 = "A"
+            elif EXAMNO[0] == 1 and count_pass[word_test[0]].find("B") == -1 : mark_pass2 = "B"
+            elif EXAMNO[0] == 2 and count_pass[word_test[0]].find("C") == -1 : mark_pass2 = "C"
+            elif EXAMNO[0] == 3 and count_pass[word_test[0]].find("D") == -1 : mark_pass2 = "D"
+            elif EXAMNO[0] == 4 and count_pass[word_test[0]].find("E") == -1 : mark_pass2 = "E"
             test_pass[word_test[0]] = test_pass[word_test[0]] + mark_pass
-            if u1.PointPassAll(word_test[0]) == 0 :
-                point_pass[word_test[0]] = point_pass[word_test[0]] + mark_pass
+            count_pass[word_test[0]] = count_pass[word_test[0]] + mark_pass2
             mark_pass = ''
+            pg.display.update()
+            pg.time.delay(3000)
             if EXAMNO[0] < 4 :
                 EXAMNO[0] += 1
+            if count_pass[word_test[0]].find("A")!= -1 and count_pass[word_test[0]].find("B")!= -1 \
+                and count_pass[word_test[0]].find("C")!= -1 and count_pass[word_test[0]].find("D")!= -1 and count_pass[word_test[0]].find("E")!= -1 :
+                page = "success"
+                count_pass[word_test[0]] = ""
+                u1.WriteData(memprofile,hold_p,test_pass,count_pass)
             type_test_inputbox.text = "  "
             type_test_inputbox.txt_surface = type_test_inputbox.font.render(type_test_inputbox.text, True, pg.Color("black"))
-            u1.WriteData(memprofile,hold_p,test_pass,point_pass)
-        
-        for i in range(5):
-            if EXAMNO[0] == i and point_pass[word_test[0]].find(checklist_stamp[i]) != -1 :
-                t4 = Text(90,250, 80, "browallianewbold", green, 1, "PASS") 
-                t4.draw(screen)
-        
-        # elif EXAMNO[0] == 1 and point_pass[word_test[0]].find("B") != -1 :
-        #     t4 = Text(90,250, 80, "browallianewbold", green, 1, "PASS") 
-        #     t4.draw(screen)
-
-        # elif EXAMNO[0] == 2 and point_pass[word_test[0]].find("C") != -1 :
-        #     t4 = Text(90,250, 80, "browallianewbold", green, 1, "PASS") 
-        #     t4.draw(screen)
-
-
-        # elif EXAMNO[0] == 3 and point_pass[word_test[0]].find("D") != -1 :
-        #     t4 = Text(90,250, 80, "browallianewbold", green, 1, "PASS") 
-        #     t4.draw(screen)
-
-
-        # elif EXAMNO[0] == 4 and point_pass[word_test[0]].find("E") != -1 :
-        #     t4 = Text(90,250, 80, "browallianewbold", green, 1, "PASS") 
-        #     t4.draw(screen)
-
-        # else :
-        #     t4 = Text(90,250, 80, "browallianewbold", green, 1, "")
-        #     t4.draw(screen)
-
-        if u1.TestPassAll(word_test[0]) :
-            test_pass[word_test[0]] = ''
-            type_test_inputbox.text = "  "
-            type_test_inputbox.txt_surface = type_test_inputbox.font.render(type_test_inputbox.text, True, pg.Color("black"))
-            hold_p[word_test[0]] = 0
-            page = 'practice'
-
-            u1.WriteData(memprofile,hold_p,test_pass,point_pass)
+        if EXAMNO[0] == 0 and test_pass[word_test[0]].find("A") != -1 :
+            t4 = Text(90,250, 80, "browallianewbold", green, 1, "PASS") 
+            t4.draw(screen)
             
+        elif EXAMNO[0] == 1 and test_pass[word_test[0]].find("B") != -1 :
+            t4 = Text(90,250, 80, "browallianewbold", green, 1, "PASS") 
+            t4.draw(screen)
+
+        elif EXAMNO[0] == 2 and test_pass[word_test[0]].find("C") != -1 :
+            t4 = Text(90,250, 80, "browallianewbold", green, 1, "PASS") 
+            t4.draw(screen)
+            
+        elif EXAMNO[0] == 3 and test_pass[word_test[0]].find("D") != -1 :
+            t4 = Text(90,250, 80, "browallianewbold", green, 1, "PASS") 
+            t4.draw(screen)
+            
+        elif EXAMNO[0] == 4 and test_pass[word_test[0]].find("E") != -1 :
+            t4 = Text(90,250, 80, "browallianewbold", green, 1, "PASS") 
+            t4.draw(screen)
+            
+        else :
+            t4 = Text(90,250, 80, "browallianewbold", green, 1, "")
+            t4.draw(screen)
+
+        # pg.display.update()
+        # for event in pg.event.get():
+        #     if event.type == pg.QUIT:
+        #         pg.quit()
+
         pg.display.update()
         for event in pg.event.get():
             if event.type == pg.KEYDOWN:    
@@ -1392,3 +1393,24 @@ while(1):
             if event.type == pg.QUIT:
                 pg.quit()         
 
+
+
+##### CALCULATE PERCENT PROGRESS #############################################################################
+    # if test_pass[0] != '' or test_pass[1] != '' or test_pass[2] != '':
+    progress_percent = 0.00
+    progress_point = 0
+    for n in range(3):
+        if test_pass[n].find("A") != -1 :
+            progress_point += 1
+        if test_pass[n].find("B") != -1 :
+            progress_point += 1
+        if test_pass[n].find("C") != -1 :
+            progress_point += 1
+        if test_pass[n].find("D") != -1 :
+            progress_point += 1
+        if test_pass[n].find("E") != -1 :
+            progress_point += 1
+    progress_percent = round(((progress_point/15)*100),2)
+            
+    #if event.type==pygame.KEYDOWN:
+    #   if event.key==pygame.K_KP_ENTER:
