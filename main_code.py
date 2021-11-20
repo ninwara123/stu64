@@ -105,15 +105,17 @@ n4 = Button(650,500,250,220)
 n5 = Button(940,263,210,535-263)
 
 #test
+redu_btn = Button(1056,100,63,63)
 back_test_btn = Button(1130,100,63,63)
 next_test_btn = Button(1200,100,63,63)
 correct_btn = Button(800,250,400,400)
-
+back_to_lesson = Button(172,12,66,66)
 ### variables #############################################################################################
 enter_press = 0
 click = 0
 regis_click = 0
 login_click = 0
+pro_correct = 0
 progress_percent = 0.00
 progress_point = 0
 csv_member_list = []
@@ -156,7 +158,7 @@ FOOD_LIST = ['Noodle','Spaghetti','Cookies','Croissant','Lamonade']
 
 
 #test 
-type_test_inputbox = InputBox(340,510,600,80,60,6,1)
+type_test_inputbox = InputBox(393,530,494,61,50,12,1)
 animal_boxes = [type_test_inputbox]
 animal_key_check_button = Button(1000,600,280,120)
 animal_key_check_i = 0
@@ -591,12 +593,11 @@ while(1):
 
     elif page =="setting" :
         (pos_x, pos_y) = pg.mouse.get_pos() # ถ้าเม้ากดยังจุดใดก็ตามที่ไม่ใช้ในกล่อง setting ให้กลับไปยัง state ก่อนหน้า like : pop-up
-        case1 = a1.x <= pos_x <= a1.x + a1.w and a1.y <= pos_y <= a1.y + a1.h
-        case2 = a2.x <= pos_x <= a2.x + a2.w and a2.y <= pos_y <= a2.y + a2.h
-        case3 = a3.x <= pos_x <= a3.x + a3.w and a3.y <= pos_y <= a3.y + a3.h
-        case4 = a4.x <= pos_x <= a4.x + a4.w and a4.y <= pos_y <= a4.y + a4.h
+        case1 = Button(0,0,1280,110)
+        case2 = Button(0,111,1025,720-111)
+        case3 = Button(1026,254,1280-1026,720-254)
         screen.blit(ulp.all_setting_btn,(1023,12)) 
-        if (case1 or case2 or case3 or case4 ) :
+        if (case1.mouse_on() or case2.mouse_on() or case3.mouse_on()) :
             if pg.mouse.get_pressed()[0] == 1  :
                 click = 1
             if pg.mouse.get_pressed()[0] == 0 and click ==1:
@@ -768,7 +769,7 @@ while(1):
         if option.mouse_on() :   #---------setting
             backpage = "lesson"
             screen.blit(ulp.all_setting_btn,(1023,12)) 
-            pg.display.update()
+            # pg.display.update()
             if pg.mouse.get_pressed()[0] == 1:
                 click = 1
                 option_sta =1
@@ -890,7 +891,7 @@ while(1):
         if option.mouse_on() and boi_state == 0:   #---------setting
             backpage = "animal_lesson"
             screen.blit(ulp.all_setting_btn,(1023,12)) 
-            pg.display.update()
+            # pg.display.update()
             if pg.mouse.get_pressed()[0] == 1:
                 click = 1
                 option_sta =1
@@ -986,7 +987,7 @@ while(1):
         if option.mouse_on() and boi_state == 0:   #---------setting
             backpage = "classroon_lesson"
             screen.blit(ulp.all_setting_btn,(1023,12)) 
-            pg.display.update()
+            # pg.display.update()
             if pg.mouse.get_pressed()[0] == 1:
                 click = 1
                 option_sta =1
@@ -998,8 +999,6 @@ while(1):
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 pg.quit() 
-
-   
 
     elif page == 'food_lesson':
         print('food_lesson')
@@ -1080,7 +1079,7 @@ while(1):
         if option.mouse_on() and boi_state == 0:   #---------setting
             backpage = "food_lesson"
             screen.blit(ulp.all_setting_btn,(1023,12)) 
-            pg.display.update()
+            # pg.display.update()
             if pg.mouse.get_pressed()[0] == 1:
                 click = 1
                 option_sta =1
@@ -1114,7 +1113,7 @@ while(1):
         if option.mouse_on() :   #---------setting
             backpage = "practice"
             screen.blit(ulp.all_setting_btn,(1023,12)) 
-            pg.display.update()
+            # pg.display.update()
             if pg.mouse.get_pressed()[0] == 1:
                 click = 1
                 option_sta =1
@@ -1203,7 +1202,7 @@ while(1):
             head_text = "Foods"
         t5 = Text(294, 24, 50, "browallianewbold", (0,0,0), 1, head_text)
         t5.draw(screen)
-        t6 = Text(40,110 , 80, "browallianewbold", (0,0,0), 1, str(EXAMNO[0]) +" / 5")
+        t6 = Text(40,110 , 80, "browallianewbold", (0,0,0), 1, str(EXAMNO[0]+1) +" / 5")
         t6.draw(screen)
         if back_page_btn.mouse_on():
             screen.blit(ulp.back_page_green_btn,(15,12))
@@ -1222,7 +1221,7 @@ while(1):
         if option.mouse_on() :   #---------setting
             backpage = "test_practice"
             screen.blit(ulp.all_setting_btn,(1023,12)) 
-            pg.display.update()
+            # pg.display.update()
             if pg.mouse.get_pressed()[0] == 1:
                 click = 1
                 option_sta =1
@@ -1230,24 +1229,50 @@ while(1):
                 page = "setting"
                 back_page_state = "test_practice"
                 click =0
-
+        if back_to_lesson.mouse_on():
+            screen.blit(ulp.back_to_lesson_pic,(172,12))
+            if pg.mouse.get_pressed()[0] == 1:
+                click = 1
+            if pg.mouse.get_pressed()[0] == 0 and click ==1:
+                click =0
+                if text_check == 0 :
+                    page = "animal_lesson"
+                if text_check == 1 :
+                    page = "classroom_lesson"
+                if text_check == 2 :
+                    page = "food_lesson"
+        if redu_btn.mouse_on():
+            screen.blit(ulp.redu_test_pic,(1051,98))
+            if pg.mouse.get_pressed()[0] == 1:
+                click = 1
+            if pg.mouse.get_pressed()[0] == 0 and click ==1:
+                click =0
+                pro_correct = 0
+                type_test_inputbox.text = "  "
+                type_test_inputbox.txt_surface = type_test_inputbox.font.render(type_test_inputbox.text, True, pg.Color("black"))
+        if EXAMNO[0] == 0:
+            t2 = Text(90,250, 80, "browallianewbold", green, 1, "sri tao i sas na ja") 
+            t2.draw(screen)
         if EXAMNO[0] > 0:
             if back_test_btn.mouse_on():
+                screen.blit(ulp.back_test_pic,(1127,98))
                 if pg.mouse.get_pressed()[0] == 1:
                     click = 1
                 if pg.mouse.get_pressed()[0] == 0 and click ==1:
                     EXAMNO[1] = 1
                     EXAMNO[0] -= 1
+                    pro_correct = 0
                     type_test_inputbox.text = "  "
                     type_test_inputbox.txt_surface = type_test_inputbox.font.render(type_test_inputbox.text, True, pg.Color("black"))
                     
                     click =0
         if EXAMNO[0] < 4:
             if next_test_btn.mouse_on():
+                screen.blit(ulp.next_test_pic,(1201,98))
                 if pg.mouse.get_pressed()[0] == 1:
                     click = 1
                 if pg.mouse.get_pressed()[0] == 0 and click ==1:
-                    
+                    pro_correct = 0
                     EXAMNO[1] = 1
                     EXAMNO[0] += 1
                     type_test_inputbox.text = "  "
@@ -1257,6 +1282,7 @@ while(1):
         # screen.blit(ulp.pic_i_test_object[word_test[0]][EXAMNO[0]],(528,165))
         screen.blit(pic_i_run[EXAMNO[0]],(490,165))
         if practice_pass == 1:
+            # pg.display.update()
             mic = sr.Microphone(1)
             r = sr.Recognizer()
             with mic as source:
@@ -1274,56 +1300,55 @@ while(1):
                         pass_test_flag = 1 
                         micc = False
                         practice_pass = 0
+                        pro_correct = 2
+                    else:
+                        pro_correct = 1
                     practice_pass = 0
                 except :
                     print("cant do it")
                     practice_pass = 0
+                    pro_correct = 1
                     continue
                 # or type_test_inputbox.text == ("  "+word_test[1][EXAMNO[0]]).lower() or type_test_inputbox.text == ("  "+word_test[1][EXAMNO[0]]).upper():
+       
+        if pro_correct == 2:
+            screen.blit(ulp.pro_correct_pic,(0,0))
+            type_test_inputbox.txt_surface = type_test_inputbox.font.render(type_test_inputbox.text, True, pg.Color("black"))
+            screen.blit(ulp.corect_Ans,(0,0))
+            for i in range(5):
+                if EXAMNO[0] == i and test_pass[word_test[0]].find(checklist_stamp[i]) != -1 :
+                    t4 = Text(90,250, 80, "browallianewbold", green, 1, "PASS") 
+                    t4.draw(screen)
+            pg.display.update()
+            pg.time.delay(3000)
+            pro_correct = 0
+        if pro_correct == 1:
+            screen.blit(ulp.pro_incorrect_pic,(0,0))
         if type_test_inputbox.text.lower() == ("  "+word_test[1][EXAMNO[0]].lower()) :
-            t3 = Text(500,300, 80, "browallianewbold", red, 1, "CORRECT") #text username 
-            t3.draw(screen)
+            screen.blit(ulp.corect_Ans,(0,0))
+        if type_test_inputbox.text.lower() != ("  "+word_test[1][EXAMNO[0]].lower()) and type_test_inputbox.text.lower() != ("  "):
+            screen.blit(ulp.incorect_Ans,(0,0))
         if enter_press == 1:
             if type_test_inputbox.text.lower() == ("  "+word_test[1][EXAMNO[0]].lower()) :
                 print("true answer")
-                # practice_pass = 1
-                pass_test_flag = 1 
-                EXAMNO[1] = 1
-                 
-
-            else :
-                print("wrong answer")
-            print("input answer is :" + type_test_inputbox.text)
-            print("true answer is :" + ("  "+word_test[1][EXAMNO[0]])  +(',')+ ("  "+word_test[1][EXAMNO[0]]).lower() )#+(',')+ ("  "+word_test[1][EXAMNO[0]]).upper())
+                practice_pass = 1
+                screen.blit(ulp.record_pic,(0,0))
+                # pass_test_flag = 1 
+                # EXAMNO[1] = 1
             enter_press = 0
-            # type_test_inputbox.text = "  "
-            # type_test_inputbox.txt_surface = type_test_inputbox.font.render(type_test_inputbox.text, True, pg.Color("black"))
-
         for box in animal_boxes:
             box.draw(screen)
-
-
-        #save change
-        # if test_pass[0].find("A") != -1 and test_pass[0].find("B") != -1 and test_pass[0].find("C") != -1 and test_pass[0].find("D") != -1 and test_pass[0].find("E") != -1 and pass_animal == 4:
-        #     page = "success"
-        # if test_pass[1].find("A") != -1 and test_pass[1].find("B") != -1 and test_pass[1].find("C") != -1 and test_pass[1].find("D") != -1 and test_pass[1].find("E") != -1 and pass_classroom == 4:
-        #     page = "success"
-        # if test_pass[2].find("A") != -1 and test_pass[2].find("B") != -1 and test_pass[2].find("C") != -1 and test_pass[2].find("D") != -1 and test_pass[2].find("E") != -1 and pass_food == 4:
-        #     page = "success"
         if EXAMNO[1] == 1 :
             EXAMNO[1] = 0
             hold_p[word_test[0]] = str(EXAMNO[0])
             u1.WriteData(memprofile,hold_p,test_pass,point_pass)
             memprofile,hold_p,test_pass,point_pass = u1.ReadData(memprofile[0])
-
             print('memprofile')
             print(memprofile)
             print("hold_p")
             print(hold_p)
             print("test pass")
             print(test_pass)   
-
-
         # for point
         checklist_stamp = ['A','B','C','D','E']
         if pass_test_flag == 1 :
@@ -1332,10 +1357,6 @@ while(1):
             pass_test_flag = 0
             for i in range(5):
                 if EXAMNO[0] == i and test_pass[word_test[0]].find(checklist_stamp[i]) == -1 : mark_pass = checklist_stamp[i]
-                # elif EXAMNO[0] == 1 and test_pass[word_test[0]].find("B") == -1 : mark_pass = "B"
-                # elif EXAMNO[0] == 2 and test_pass[word_test[0]].find("C") == -1 : mark_pass = "C"
-                # elif EXAMNO[0] == 3 and test_pass[word_test[0]].find("D") == -1 : mark_pass = "D"
-                # elif EXAMNO[0] == 4 and test_pass[word_test[0]].find("E") == -1 : mark_pass = "E"
             test_pass[word_test[0]] = test_pass[word_test[0]] + mark_pass
             if u1.PointPassAll(word_test[0]) == 0 :
                 point_pass[word_test[0]] = point_pass[word_test[0]] + mark_pass
@@ -1347,32 +1368,10 @@ while(1):
             u1.WriteData(memprofile,hold_p,test_pass,point_pass)
         
         for i in range(5):
-            if EXAMNO[0] == i and point_pass[word_test[0]].find(checklist_stamp[i]) != -1 :
-                t4 = Text(90,250, 80, "browallianewbold", green, 1, "PASS") 
-                t4.draw(screen)
-        
-        # elif EXAMNO[0] == 1 and point_pass[word_test[0]].find("B") != -1 :
-        #     t4 = Text(90,250, 80, "browallianewbold", green, 1, "PASS") 
-        #     t4.draw(screen)
-
-        # elif EXAMNO[0] == 2 and point_pass[word_test[0]].find("C") != -1 :
-        #     t4 = Text(90,250, 80, "browallianewbold", green, 1, "PASS") 
-        #     t4.draw(screen)
-
-
-        # elif EXAMNO[0] == 3 and point_pass[word_test[0]].find("D") != -1 :
-        #     t4 = Text(90,250, 80, "browallianewbold", green, 1, "PASS") 
-        #     t4.draw(screen)
-
-
-        # elif EXAMNO[0] == 4 and point_pass[word_test[0]].find("E") != -1 :
-        #     t4 = Text(90,250, 80, "browallianewbold", green, 1, "PASS") 
-        #     t4.draw(screen)
-
-        # else :
-        #     t4 = Text(90,250, 80, "browallianewbold", green, 1, "")
-        #     t4.draw(screen)
-
+            if EXAMNO[0] == i and test_pass[word_test[0]].find(checklist_stamp[i]) != -1 :
+                # t4 = Text(90,250, 80, "browallianewbold", green, 1, "PASS") 
+                # t4.draw(screen)
+                screen.blit(ulp.pass_chioce,(177,98))
         if u1.TestPassAll(word_test[0]) :
             test_pass[word_test[0]] = ''
             type_test_inputbox.text = "  "

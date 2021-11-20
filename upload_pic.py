@@ -80,10 +80,19 @@ n4_mouseon = pg.image.load(ui_pic_path+'/mouse_on_Croissant.png')
 n5_mouseon = pg.image.load(ui_pic_path+'/mouse_on_lemon.png')
 
 #practice_page
+back_to_lesson_pic =  pg.image.load(ui_pic_path+'/choose_button.png')
+back_test_pic = pg.image.load(ui_pic_path+'/backword_green.png')
+next_test_pic = pg.image.load(ui_pic_path+'/nextword_green.png')
+redu_test_pic = pg.image.load(ui_pic_path+'/reword_green.png')
 practice_page =  pg.image.load(ui_pic_path+'/practice_page.jpg')
-
+record_pic = pg.image.load(ui_pic_path+'/recording_pic.png')
+corect_Ans = pg.image.load(ui_pic_path+'/spell_correct_pic.png')
+incorect_Ans = pg.image.load(ui_pic_path+'/spell_incorrect_pic.png')
+pro_incorrect_pic = pg.image.load(ui_pic_path+'/pronounce_incorrect_pic.png')
+pro_correct_pic = pg.image.load(ui_pic_path+'/pronounce_correct_pic.png')
 #practice_page
-test_page = pg.image.load(ui_pic_path+'/practice_in.jpg')
+pass_chioce = pg.image.load(ui_pic_path+'/pass_pic.png')
+test_page = pg.image.load(ui_pic_path+'/final_practice_game.jpg')
 correct_icon = pg.image.load(ui_pic_path+'/correct.jpg')
 success = pg.image.load((ui_pic_path+'/section.jpg'))
 
