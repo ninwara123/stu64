@@ -216,11 +216,12 @@ class user():
         for filename in filenames:
             if username+'.csv' == filename:
                 user_status = 'have'
-                print(user_status)
+                # print(user_status)
                 return user_status
             else:
                 user_status = 'nohave'
-                print(user_status)
+                # print(user_status)
+                # return user_status
             
         return user_status
 
