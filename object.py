@@ -158,8 +158,8 @@ class user():
         row = []
         # row = row+self.memprofile+self.hold_p+self.test_pass
         row = memprofile + hold_p + test_pass + point_pass
-        print("row")
-        print(row)
+        # print("row")
+        # print(row)
         # row = row.append(self.hold_p)
         # row = row.append(self.test_pass)
         user_data_file = open('user_data/'+memprofile[0]+'.csv','w', encoding='UTF8', newline='') 

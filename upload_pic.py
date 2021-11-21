@@ -53,6 +53,7 @@ back_home_green_btn = pg.image.load(ui_pic_path+'/home_button.png')
 
 
 
+m_O_piccc =  pg.image.load(ui_pic_path+'/mouse_on_word.png')
 #lesson_page
 
 lesson_page =  pg.image.load(ui_pic_path+'/lesson_page.jpg')

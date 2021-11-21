@@ -18,6 +18,7 @@ import face_recognition as face
 import numpy as np
 import csv
 from playsound import playsound
+from gtts import gTTS
 import speech_recognition as sr
 import pyaudio
 
@@ -160,12 +161,14 @@ mmmmooo = []
 is_human = 0
 k = 0
 text_check = 3
+call_name = 1
 ### run code ###############################################################################################
 ############################################################################################################
 ############################################################################################################
 ############################################################################################################
 while(1):
     (pos_x, pos_y) = pg.mouse.get_pos()
+
 ##### CODE START PAGE #######################################################################################
     if page == 'start':
         screen.blit(ulp.first_page,(0,0))
@@ -174,17 +177,17 @@ while(1):
         filenames = os.listdir(user_data_path)
         for filename in filenames:
             if '.csv' in filename:
-                print(filename)
+                # print(filename)
                 csv_list.append(filename)
                 user_data_file = open('user_data/'+filename,'r', encoding="utf8")
                 reader = csv.reader(user_data_file)
                 for row in reader:
                     memprofile = row[0:6]
-                    print(memprofile)
+                    # print(memprofile)
                     if memprofile[5] == '1':
                         txt_member_list.append(filename)
                 user_data_file.close()
-        print(len(txt_member_list))
+        # print(len(txt_member_list))
         if len(txt_member_list) == 0:
             page = "login"
         else:
@@ -205,9 +208,9 @@ while(1):
             user_data_file.close()
         #ใบหน้าคนที่ต้องการรู้จำเป็นreference #คนที่1
         for i in range(len(txt_member_list)):
-            print(i)
+            # print(i)
             file_name,type_file = txt_member_list[i].split(".")
-            print(file_name+"\n"+type_file)
+            # print(file_name+"\n"+type_file)
             try:
                 known_face_encodings.append(face.face_encodings(face.load_image_file("user_data/"+mempicture_list[i]))[0])
                 known_face_names.append(file_name)
@@ -217,7 +220,7 @@ while(1):
         face_encodings = []
         face_names = []
         face_percent = []
-        print(known_face_names)
+        # print(known_face_names)
         video_capture = cv2.VideoCapture(0) 
         while capper == True:
             k += 1 
@@ -249,6 +252,7 @@ while(1):
                         user_data_file.close()
                     capper = False
                     page = "profile"
+
                     print("findddddd")
             if k >= 5:
                 page = "login"
@@ -298,15 +302,22 @@ while(1):
                     wrong[4] = 1 
                     please = True  # get error message
         if click == 1 and pg.mouse.get_pressed()[0] == 0:
-            click = 0
+            click = 2
             memprofile,hold_p,test_pass,point_pass = u1.ReadData(distance_box.text)
-            distance_box.text = "  "
-            distance_box.txt_surface = distance_box.font.render(distance_box.text, True, pg.Color("black"))
-            page = "profile"
+            
         if regis_click == 1 and pg.mouse.get_pressed()[0] == 0:
             regis_click = 0
             wrong =[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
             page = 'register'
+        if click == 2 :
+            output = gTTS(text="สวัสดีน้อง"+memprofile[3],lang="th",slow=False)
+            output.save("s/login_name"+memprofile[0]+".mp3")
+            
+            click = 0
+            distance_box.text = "  "
+            distance_box.txt_surface = distance_box.font.render(distance_box.text, True, pg.Color("black"))
+            page = "profile"
+            call_name = 1
         distance_box.draw(screen)
         pg.display.update()
         for event in pg.event.get():
@@ -492,6 +503,9 @@ while(1):
                 click =0
         ####################################################################################################################### 
         pg.display.update()
+        if call_name == 1:
+            playsound(project_path+"/s/login_name"+memprofile[0]+".mp3")
+            call_name = 0
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 pg.quit()
@@ -567,6 +581,7 @@ while(1):
         mempicture_list = []
         k = 0
         capper = True
+        call_name = 1
 
 ##### CODE EDIT_PROFILE PAGE #################################################################################
     elif page == "edit_profile":  
@@ -688,8 +703,9 @@ while(1):
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 pg.quit() 
+    
     elif page == 'animal_lesson':
-        print('animal_lesson')
+        # print('animal_lesson')
         screen.blit(ulp.animal_lesson_page, (0,0))
         if boi_state == 1:
             boi = pg.image.load(project_path+'/ui_photo/pop_up_animal_'+m0.lower()+'.png')
@@ -783,7 +799,7 @@ while(1):
                 pg.quit() 
 
     elif page == 'classroon_lesson':
-        print('classroon_lesson')
+        # print('classroon_lesson')
         # classroon_lesson_page = pg.image.load(project_path+'/ui_photo/lesson_classroom.jpg')
         screen.blit(ulp.classroon_lesson_page,(0,0))
         # screen.blit(ulp.food_lesson_page, (0,0))
@@ -878,7 +894,7 @@ while(1):
                 pg.quit() 
 
     elif page == 'food_lesson':
-        print('food_lesson')
+        # print('food_lesson')
         screen.blit(ulp.food_lesson_page, (0,0))
         if boi_state == 1:
             boi = pg.image.load(project_path+'/ui_photo/pop_up_food_'+m0.lower()+'.png')
@@ -980,6 +996,7 @@ while(1):
             if pg.mouse.get_pressed()[0] == 0 and click ==1:
                 page = "profile"
                 click =0
+        
         if back_home_btn.mouse_on():
             screen.blit(ulp.back_home_green_btn,(94,12))
             if pg.mouse.get_pressed()[0] == 1:
@@ -987,6 +1004,7 @@ while(1):
             if pg.mouse.get_pressed()[0] == 0 and click ==1:
                 page = "profile"
                 click =0
+        
         if option.mouse_on() :   #---------setting
             backpage = "practice"
             screen.blit(ulp.all_setting_btn,(1023,12)) 
@@ -1001,6 +1019,7 @@ while(1):
 
         if animal_btn.mouse_on():
             #?
+            screen.blit(ulp.m_O_piccc,(48,122))
             if pg.mouse.get_pressed()[0] == 1:
                 click = 1
             if pg.mouse.get_pressed()[0] == 0 and click ==1:
@@ -1010,13 +1029,13 @@ while(1):
                 for u in range(5):
                     pic_i_run.append(pg.image.load(project_path+'/practice_pic/'+ str(word_test[1][u]).lower() +'.png'))
                 EXAMNO[0] = int(hold_p[word_test[0]])
-                print(EXAMNO[0])
+                # print(EXAMNO[0])
                 text_check = 0
                 click =0
 
-
         if classroon_btn.mouse_on():
             #?
+            screen.blit(ulp.m_O_piccc,(453,122))
             pic_i_run = []
             if pg.mouse.get_pressed()[0] == 1:
                 click = 1
@@ -1026,13 +1045,13 @@ while(1):
                 for u in range(5):
                     pic_i_run.append(pg.image.load(project_path+'/practice_pic/'+ str(word_test[1][u]).lower() +'.png'))
                 EXAMNO[0] = int(hold_p[word_test[0]])
-                
-                print(EXAMNO[0])
+                # print(EXAMNO[0])
                 text_check = 1
                 click =0
-            
+        
         if food_btn.mouse_on():
             #?
+            screen.blit(ulp.m_O_piccc,(857,122))
             if pg.mouse.get_pressed()[0] == 1:
                 click = 1
             if pg.mouse.get_pressed()[0] == 0 and click ==1:
@@ -1043,20 +1062,22 @@ while(1):
                     pic_i_run.append(pg.image.load(project_path+'/practice_pic/'+ str(word_test[1][u]).lower() +'.png'))
                 
                 EXAMNO[0] = int(hold_p[word_test[0]])
-                print(EXAMNO[0])
+                # print(EXAMNO[0])
                 text_check = 2
                 click =0
-            print(pic_i_run)
+            # print(pic_i_run)
+        
         if u1.PointPassAll(0) :
             t_s_1 = Text(123+30, 50+10+100, 50, "browallianewbold", green, 1, 'Success')
             t_s_1.draw(screen)
+        
         if u1.PointPassAll(1) :
             t_s_2 = Text(455+30, 50+10+100, 50, "browallianewbold", green, 1, 'Success')
             t_s_2.draw(screen)
+        
         if u1.PointPassAll(2) :
             t_s_3 = Text(860+30, 50+10+100, 50, "browallianewbold", green, 1, 'Success')
             t_s_3.draw(screen)
-
         pg.display.update()
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -1154,7 +1175,7 @@ while(1):
                 audio = r.listen(source)
                 try: 
                     text1 = r.recognize_google(audio,language='en')
-                    print(text1)
+                    # print(text1)
                     if text1 == word_test[1][EXAMNO[0]].lower():
                         EXAMNO[1] = 1
                         pass_test_flag = 1 
@@ -1187,8 +1208,9 @@ while(1):
             screen.blit(ulp.incorect_Ans,(0,0))
         if enter_press == 1:
             if type_test_inputbox.text.lower() == ("  "+word_test[1][EXAMNO[0]].lower()) :
-                print("true answer")
-                practice_pass = 1
+                # print("true answer")
+                # practice_pass = 1
+                pass_test_flag = 1 
                 screen.blit(ulp.record_pic,(0,0))
             enter_press = 0
         for box in animal_boxes:
@@ -1198,16 +1220,16 @@ while(1):
             hold_p[word_test[0]] = str(EXAMNO[0])
             u1.WriteData(memprofile,hold_p,test_pass,point_pass)
             memprofile,hold_p,test_pass,point_pass = u1.ReadData(memprofile[0])
-            print('memprofile')
-            print(memprofile)
-            print("hold_p")
-            print(hold_p)
-            print("test pass")
-            print(test_pass)   
+            # print('memprofile')
+            # print(memprofile)
+            # print("hold_p")
+            # print(hold_p)
+            # print("test pass")
+            # print(test_pass)   
         # for point
         checklist_stamp = ['A','B','C','D','E']
         if pass_test_flag == 1 :
-            print('pass')
+            # print('pass')
             EXAMNO[1] = 1
             pass_test_flag = 0
             for i in range(5):
@@ -1229,6 +1251,9 @@ while(1):
             type_test_inputbox.text = "  "
             type_test_inputbox.txt_surface = type_test_inputbox.font.render(type_test_inputbox.text, True, pg.Color("black"))
             hold_p[word_test[0]] = 0
+            output = gTTS(text="เก่งมากครับน้อง"+memprofile[3],lang="th",slow=False)
+            output.save("s/good_job_name"+memprofile[0]+".mp3")
+            playsound(project_path+"/s/good_job_name"+memprofile[0]+".mp3")
             page = 'practice'
             u1.WriteData(memprofile,hold_p,test_pass,point_pass)
         pg.display.update()
