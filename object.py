@@ -101,10 +101,10 @@ class InputBox:
                             self.text += event.unicode
                         if event.unicode in eng_alphabet:
                             if self.first_upper_mode == 1:
-                                if len(self.text)<3 and event.unicode.islower() == True:
+                                if len(self.text)<3 :
                                     self.text += event.unicode.upper()
                                 elif len(self.text)>=3:
-                                    self.text += event.unicode
+                                    self.text += event.unicode.lower()
                             if self.first_upper_mode == 0:
                                 self.text += event.unicode
                 # Re-render the text.

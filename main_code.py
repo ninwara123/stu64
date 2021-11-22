@@ -1048,7 +1048,13 @@ while(1):
                 # print(EXAMNO[0])
                 text_check = 1
                 click =0
-        
+        if back_to_lesson.mouse_on():
+            screen.blit(ulp.back_to_lesson_pic,(172,12))
+            if pg.mouse.get_pressed()[0] == 1:
+                click = 1
+            if pg.mouse.get_pressed()[0] == 0 and click ==1:
+                page = 'lesson'
+                click = 0
         if food_btn.mouse_on():
             #?
             screen.blit(ulp.m_O_piccc,(857,122))
@@ -1254,6 +1260,7 @@ while(1):
             output = gTTS(text="เก่งมากครับน้อง"+memprofile[3],lang="th",slow=False)
             output.save("s/good_job_name"+memprofile[0]+".mp3")
             playsound(project_path+"/s/good_job_name"+memprofile[0]+".mp3")
+            os.remove(project_path+"/s/good_job_name"+memprofile[0]+".mp3")
             page = 'practice'
             u1.WriteData(memprofile,hold_p,test_pass,point_pass)
         pg.display.update()
