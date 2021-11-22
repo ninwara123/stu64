@@ -1,6 +1,11 @@
 import pygame as pg
 import cv2
 pg.init()
+import os 
+import csv   
+project_path = 'D:/stu64'
+user_data_path = project_path +'/user_data'
+
 
 eng_alphabet = ['q','w','e','r','t','y','u','i','o','p','a','s','d','f','g','h','j',' ','k','l','z','x','c','v','b','n','m','Q','W','E','R','T','Y','U','I','O','P','A','S','D','F','G','H','J','K','L','Z','X','C','V','B','N','M']
 
@@ -121,10 +126,6 @@ class InputBox:
         screen.blit(self.txt_surface, (self.rect.x, self.rect.y+self.space_in_y))
         # Blit the rect.
         pg.draw.rect(screen, self.color, self.rect, 2)
-import os 
-import csv   
-project_path = 'D:/stu64'
-user_data_path = project_path +'/user_data'
 
 class user():
     # def __init__(self,username,firstname,surname,nickname,typepic,ishuman,hold_p_1,hold_p_2,hold_p_3,pass_1,pass_2,pass_3):
